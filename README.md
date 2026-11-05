@@ -50,7 +50,7 @@ See [Installation](docs/INSTALLATION.md), [Hermes setup](docs/HERMES_SETUP.md), 
 
 Connect your Hermes profiles and give them tasks based on their tools and expertise. Your team can research, write, code, work with files, and handle other tasks supported by your Hermes setup.
 
-AgentDock also includes built-in workflows for prompt extraction, research, narration, scene authoring, and optional Google Flow image generation. Assign capability labels to route these workflows to the appropriate profiles.
+AgentDock brings your Hermes agents into one shared command room. Give your team a goal, coordinate work across profiles, and follow tasks and results in one place. You choose what each agent does through its tools, expertise, and configuration.
 
 Available actions depend on each profile's enabled tools, permissions, and configuration. See the [Hermes setup guide](docs/HERMES_SETUP.md) for configuration details.
 
