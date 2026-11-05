@@ -1,0 +1,71 @@
+/* Offline-rendered reference art. No WebGL context, dynamic lights, post-processing or full-screen animation. */
+.reference-mode{--rs:var(--reference-scale,1);background:#090713}
+.reference-mode #scene{position:fixed;inset:0;overflow:hidden;background:#090713;touch-action:pan-y}
+.reference-stage{position:absolute;width:1672px;height:941px;left:0;top:0;isolation:isolate}
+.reference-room{position:absolute;inset:0;width:1672px;height:941px;pointer-events:none;user-select:none}
+.reference-occluder{position:absolute;inset:0;background:url('/assets/reference-room-v1.png') 0 0/1672px 941px;pointer-events:none}
+.reference-actor{position:absolute;left:0;top:0;width:108px;height:108px;background:transparent;border:0;padding:0;cursor:pointer;outline:none;-webkit-tap-highlight-color:transparent}
+.reference-robot{position:absolute;inset:0;background-image:url('/assets/reference-robots-v1.png');background-size:400% 400%;background-repeat:no-repeat;pointer-events:none}
+.reference-contact{position:absolute;left:26px;right:26px;bottom:6px;height:11px;border-radius:50%;background:radial-gradient(ellipse,#08041288,transparent 72%);pointer-events:none}
+.reference-actor[data-pose='desk'] .reference-contact,.reference-actor[data-pose='working'] .reference-contact,.reference-actor.chief .reference-contact{opacity:0}
+.reference-actor:focus-visible{outline:2px solid #c292ff;outline-offset:-14px;border-radius:30%}
+.reference-task-paper{position:absolute;z-index:999;color:#f1d9ff;background:#9b65cc;border:1px solid #efcfff;border-radius:3px;width:15px;height:20px;line-height:18px;text-align:center;pointer-events:none}
+.reference-task-paper[hidden]{display:none}
+.reference-floor-dot{position:absolute;left:0;top:0;width:3px;height:3px;border-radius:50%;background:#e3bdff;box-shadow:0 0 5px 2px #a049ed80;z-index:2;pointer-events:none}
+.reference-pin{position:absolute;left:1027px;top:282px;width:72px;height:63px;background:transparent;border:0;z-index:400;cursor:pointer;transform:skewY(16deg)}
+.reference-pin.has-notes:before{content:'▤';position:absolute;left:18px;top:15px;color:#f6dfb6;background:#b09a79;width:16px;height:20px;font-size:15px;box-shadow:1px 2px 3px #0008}
+.reference-map .reference-actor{outline:1px solid #bb84ef55;border-radius:50%}
+.reference-mode .vignette{display:none}
+.reference-mode .topbar{height:calc(80px*var(--rs));padding:0 calc(35px*var(--rs));gap:calc(30px*var(--rs));background:linear-gradient(100deg,#0e0c19,#0b0917);border-bottom:1px solid #ab82cd30}
+.reference-mode .brand{min-width:calc(250px*var(--rs));gap:calc(14px*var(--rs))}
+.reference-mode .brand-symbol{width:calc(45px*var(--rs));height:calc(46px*var(--rs));font-size:calc(34px*var(--rs));border-radius:calc(12px*var(--rs))}
+.reference-mode .brand>span:last-child{font-size:calc(23px*var(--rs));letter-spacing:calc(2px*var(--rs))}
+.reference-mode .brand small{font-size:calc(7px*var(--rs));letter-spacing:calc(3px*var(--rs))}
+.reference-mode .top-nav{gap:calc(48px*var(--rs))}
+.reference-mode .top-nav button{font-size:calc(16px*var(--rs));padding:0;white-space:nowrap}
+.reference-mode .top-actions{gap:calc(26px*var(--rs))}
+.reference-mode .mission-launch{font-size:calc(14px*var(--rs));padding:calc(13px*var(--rs)) calc(20px*var(--rs));border-radius:calc(11px*var(--rs))}
+.reference-mode .connection-button{font-size:calc(12px*var(--rs));padding:calc(15px*var(--rs)) calc(16px*var(--rs));border-radius:calc(11px*var(--rs))}
+.reference-mode .sidebar{left:calc(24px*var(--rs));top:calc(98px*var(--rs));bottom:auto;width:calc(228px*var(--rs));padding:calc(16px*var(--rs)) calc(16px*var(--rs)) calc(5px*var(--rs));max-height:calc(100dvh - 150px*var(--rs));border-radius:calc(15px*var(--rs));background:linear-gradient(120deg,#14101ef5,#130e1ef2);box-shadow:none}
+.reference-mode .sidebar .section-label{font-size:calc(11px*var(--rs));letter-spacing:calc(1.6px*var(--rs));padding:0 0 calc(10px*var(--rs))}
+.reference-mode .sidebar #agent-count{font-size:calc(12px*var(--rs));padding:calc(5px*var(--rs)) calc(7px*var(--rs))}
+.reference-mode .sidebar .roster{margin:0;flex:none;overflow:auto;max-height:calc(100dvh - 210px*var(--rs));scrollbar-width:thin}
+.reference-mode .sidebar .agent-card{height:calc(82px*var(--rs));min-height:calc(82px*var(--rs));gap:calc(13px*var(--rs));padding:calc(8px*var(--rs)) 0}
+.reference-mode .sidebar .agent-card.selected{border-left:0;background:transparent}
+.reference-mode .sidebar .agent-card.selected:before{content:'';position:absolute;left:calc(-13px*var(--rs));height:calc(25px*var(--rs));width:2px;background:var(--card-color)}
+.reference-mode .sidebar .card-info strong{font-size:calc(14px*var(--rs));line-height:1.35}
+.reference-mode .sidebar .card-info small{font-size:calc(13px*var(--rs));margin-top:calc(5px*var(--rs));line-height:1.4}
+.reference-mode .sidebar .card-state{width:calc(9px*var(--rs));height:calc(9px*var(--rs));background:#4ce0b1;box-shadow:0 0 6px #3cda9c25}
+.reference-mode .sidebar .avatar-icon{position:relative;width:calc(43px*var(--rs));height:calc(61px*var(--rs));flex:none;overflow:visible}
+.reference-mode .reference-portrait-art{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:calc(67px*var(--rs));height:calc(67px*var(--rs));background:url('/assets/reference-robots-v1.png') 0 0/400% 400%;pointer-events:none}
+.reference-mode .sidebar .sidebar-footer{display:none}
+.reference-mode .hardware-hud{left:auto;right:calc(24px*var(--rs));top:calc(98px*var(--rs));width:calc(446px*var(--rs));padding:calc(21px*var(--rs)) calc(20px*var(--rs));border-radius:calc(16px*var(--rs));background:linear-gradient(110deg,#161021f5,#100c1af5);box-shadow:none}
+.reference-mode .hardware-hud header{font-size:calc(12px*var(--rs))}
+.reference-mode .hardware-hud>p{font-size:calc(12px*var(--rs));max-width:calc(188px*var(--rs))}
+.reference-mode .hardware-metrics{gap:calc(16px*var(--rs));margin-top:calc(21px*var(--rs))}
+.reference-mode .hardware-metrics span{font-size:calc(10px*var(--rs))}
+.reference-mode .hardware-metrics strong{font-size:calc(16px*var(--rs));line-height:1.35}
+.reference-mode .hardware-metrics strong small{font-size:calc(12px*var(--rs));margin-top:calc(3px*var(--rs))}
+.reference-mode .live-activity,.reference-mode .live-activity.collapsed{right:calc(24px*var(--rs));top:calc(240px*var(--rs));width:calc(322px*var(--rs));border-radius:calc(15px*var(--rs));background:#120d1cf5;box-shadow:none}
+.reference-mode #live-activity-toggle{height:calc(51px*var(--rs));padding:0 calc(20px*var(--rs));font-size:calc(12px*var(--rs))}
+.reference-mode .scene-controls{left:50%;bottom:calc(62px*var(--rs));padding:calc(8px*var(--rs));border-radius:calc(16px*var(--rs));gap:calc(5px*var(--rs));background:#181021ed;box-shadow:none}
+.reference-mode .scene-controls button{height:calc(40px*var(--rs));padding:0 calc(17px*var(--rs));font-size:calc(13px*var(--rs))}
+.reference-mode .scene-caption,.reference-mode .gesture-hint{display:none}
+.reference-mode .bottom-bar{height:calc(53px*var(--rs));padding:0 calc(35px*var(--rs));font-size:calc(11px*var(--rs));background:#0b0815;border-color:#a881cf28}
+.reference-mode .agent-label{min-width:calc(128px*var(--rs));max-width:calc(190px*var(--rs));padding:calc(8px*var(--rs)) calc(11px*var(--rs))!important;border-radius:calc(13px*var(--rs));background:#100c19ee;box-shadow:none;border-color:color-mix(in srgb,var(--label-color) 70%,transparent)}
+.reference-mode .agent-name-line{gap:calc(7px*var(--rs))}
+.reference-mode .agent-name-line strong{font-size:calc(13px*var(--rs))}
+.reference-mode .agent-identity-dot{width:calc(10px*var(--rs));height:calc(10px*var(--rs));box-shadow:none}
+.reference-mode .agent-label .activity-tag{font-size:calc(12px*var(--rs))!important;margin-top:calc(4px*var(--rs));padding-left:calc(17px*var(--rs))}
+@media(max-width:700px){.reference-mode .top-nav{gap:12px}.reference-mode .top-nav button{font-size:10px}.reference-mode .brand{min-width:100px}.reference-mode .brand small{display:none}.reference-mode .sidebar{width:140px;left:6px;top:65px}.reference-mode .sidebar .agent-card{min-height:51px;height:51px}.reference-mode .sidebar .card-info strong{font-size:9px}.reference-mode .sidebar .card-info small{font-size:8px}.reference-mode .sidebar .avatar-icon{width:25px;height:38px}.reference-mode .reference-portrait-art{width:44px;height:44px}.reference-mode .sidebar .section-label{font-size:9px}.reference-mode .hardware-hud{top:65px;right:6px;width:200px}.reference-mode .live-activity,.reference-mode .live-activity.collapsed{top:151px;right:6px;width:175px}.reference-mode .agent-label{min-width:95px}.reference-mode .agent-name-line strong{font-size:9px}.reference-mode .agent-label .activity-tag{font-size:8px!important}}
+.reference-map-panel{position:absolute;inset:0;pointer-events:none;z-index:1;display:none}.reference-map-panel svg{width:100%;height:100%}.reference-map-panel .map-floor{fill:#100a1a;stroke:#664087;stroke-width:2}.reference-map-panel .map-furniture rect{fill:#3b2056;stroke:#ae70ed;stroke-width:1.5}.reference-map-panel text{fill:#ab8bc5;font:13px 'Segoe UI',sans-serif;text-anchor:middle}.reference-map-panel .map-title{font-size:18px;fill:#e6cdfa;text-anchor:start}.reference-map .reference-map-panel{display:block}.reference-map .reference-room{opacity:.12}.reference-map .reference-occluder,.reference-map .reference-pin{display:none}.reference-map .reference-actor{outline:0}.reference-mode .hardware-hud header strong{font-size:calc(12px*var(--rs));letter-spacing:calc(1px*var(--rs))}.reference-mode .hardware-hud header span{font-size:calc(11px*var(--rs))}.reference-mode .hardware-hud>p{top:calc(16px*var(--rs));right:calc(58px*var(--rs));margin:calc(7px*var(--rs)) 0}.reference-mode .scene-controls button span{font-size:calc(13px*var(--rs))}.reference-mode .live-activity header button>span{font-size:calc(12px*var(--rs))}.reference-mode .hardware-hud.collapsed{width:calc(285px*var(--rs))}
+.reference-mode .scene-controls{position:fixed;left:50%;bottom:calc(62px*var(--rs))}.reference-actor[data-pose='walking']{transition:transform .075s linear}.reference-mode .hardware-hud{padding-bottom:calc(17px*var(--rs))}.reference-mode .hardware-metrics strong{margin-top:calc(6px*var(--rs))}
+@media(prefers-reduced-motion:reduce){.reference-actor{transition:none!important}}
+/* Movement-only fixes: sprite and label update together, without competing CSS easing. */
+.reference-mode .reference-actor,.reference-mode .agent-label{transition:none!important}
+.reference-occluder[hidden]{display:none}
+
+.break-settings{border:1px solid #9c72bc35;border-radius:10px;padding:13px 15px;margin:19px 0}
+.break-settings legend{font:10px var(--mono);letter-spacing:1.5px;color:#c3a5dd;padding:0 7px}
+.break-settings .setting-label{margin:12px 0}.break-settings .fine-print{margin-bottom:0}
+#settings-dialog{max-height:calc(100dvh - 48px);overflow-y:auto}

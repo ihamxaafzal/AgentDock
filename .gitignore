@@ -1,0 +1,17 @@
+node_modules/
+dist/
+backups/
+work/
+data/
+.env
+.env.*
+!.env.example
+*.log
+npm-debug.log*
+coverage/
+.DS_Store
+__pycache__/
+*.py[cod]
+docs/*.png
+docs/*.jpg
+docs/*.jpeg

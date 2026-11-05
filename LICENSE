@@ -1,0 +1,58 @@
+AgentDock Source-Available License v1.0
+
+Copyright (c) 2026 Hamza Afzal. All rights reserved.
+
+This license applies only to original AgentDock source code, documentation, and
+other materials owned by the copyright holder (the "Software"). Third-party
+materials are excluded and remain subject to their own licenses, including the
+components listed in THIRD_PARTY_NOTICES.md.
+
+1. Limited license
+
+Subject to this license, the copyright holder grants you a non-exclusive,
+worldwide, royalty-free, non-transferable license to download, install, run,
+and use the Software for personal purposes or for your organization's internal
+business purposes. You may make the copies reasonably necessary to install,
+run, back up, and restore your permitted use. You may modify a private copy for
+your own personal or internal business use.
+
+2. Restrictions
+
+You may not, without separate written permission from the copyright holder:
+
+- publish, distribute, transfer, sublicense, rent, lease, or sell the Software
+  or any copy of it;
+- distribute, publish, sublicense, or sell a modified version or derivative
+  work that contains or is based on a substantial portion of the Software;
+- sell access to the Software, offer it as a hosted service to third parties,
+  or include it in a product or service offered to third parties;
+- remove or alter copyright, license, or attribution notices; or
+- claim ownership of the Software or its original portions.
+
+You may share a link to the official AgentDock repository. Sharing a link does
+not grant permission to redistribute the repository's contents.
+
+3. Third-party materials
+
+This license does not replace or restrict the separate licenses for third-party
+materials. You must follow the applicable notices and license terms for those
+materials.
+
+4. Termination
+
+The license terminates automatically if you materially violate its terms. When
+it terminates, you must stop using the Software and delete copies in your
+possession, except where retention is required by law.
+
+5. No warranty
+
+THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+PURPOSE, AND NON-INFRINGEMENT. TO THE MAXIMUM EXTENT PERMITTED BY LAW, THE
+COPYRIGHT HOLDER WILL NOT BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY
+ARISING FROM, OUT OF, OR IN CONNECTION WITH THE SOFTWARE OR ITS USE.
+
+6. Reservation of rights
+
+All rights not expressly granted in this license are reserved by the copyright
+holder. No trademark or branding rights are granted by this license.
