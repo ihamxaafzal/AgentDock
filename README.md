@@ -46,20 +46,13 @@ Open [http://127.0.0.1:4317](http://127.0.0.1:4317) and leave **Demo universe** 
 
 See [Installation](docs/INSTALLATION.md), [Hermes setup](docs/HERMES_SETUP.md), and the [User guide](docs/USER_GUIDE.md) for all setup steps, workflows, and settings.
 
-## Worker capabilities
+## Your agents, your workflows
 
-Capabilities are generic routing labels, not profile names. Create and name your Hermes profiles as you like, then assign one or more of these values in your private `HERMES_AGENTS` configuration:
+Connect your Hermes profiles and give them tasks based on their tools and expertise. Your team can research, write, code, work with files, and handle other tasks supported by your Hermes setup.
 
-| Capability | Workflow | Hermes toolset expected |
-| --- | --- | --- |
-| `image-extraction` | Extract still-image prompts | `aether_documents` |
-| `video-extraction` | Extract video and motion prompts | `aether_video_documents` |
-| `topic-research` | Research topics and source evidence | `web` |
-| `narration-writing` | Write and validate narration | `web` |
-| `scene-authoring` | Build and save structured scene packs | `aether_scenes` |
-| `image-generation` | Generate images through your configured Google Flow workflow | `aether_flow`, `computer_use`, `terminal` |
+AgentDock also includes built-in workflows for prompt extraction, research, narration, scene authoring, and optional Google Flow image generation. Assign capability labels to route these workflows to the appropriate profiles.
 
-One profile can have multiple capabilities. Assign a capability to exactly one configured profile so AgentDock can route each supported workflow without assuming any personal roster. See [`.env.example`](.env.example) for a generic, editable shape; its names and keys are placeholders.
+Available actions depend on each profile's enabled tools, permissions, and configuration. See the [Hermes setup guide](docs/HERMES_SETUP.md) for configuration details.
 
 ## Demo and privacy
 
