@@ -27,11 +27,14 @@ test('endpoint configuration rejects unsupported capability names and duplicate 
   ]) }), /at most one Hermes endpoint/);
 });
 
-test('the published environment template parses with its generic sample profiles', async () => {
+test('the published environment template preserves routing after placeholders are replaced', async () => {
   const template = await readFile(new URL('../.env.example', import.meta.url), 'utf8');
   const value = /^HERMES_AGENTS='([^'\r\n]+)'$/m.exec(template)?.[1];
   assert.ok(value);
-  const endpoints = readEndpoints({ HERMES_AGENTS: value });
+  const entries = JSON.parse(value).map((entry, index) => ({
+    ...entry, profile: `configured-${index}`, url: `http://127.0.0.1:8642/p/configured-${index}`, key: `fixture-key-${index}`
+  }));
+  const endpoints = readEndpoints({ HERMES_AGENTS: JSON.stringify(entries) });
   assert.equal(endpoints.find(endpoint => endpoint.nativeCoordinator)?.id, 'coordinator');
   assert.deepEqual(endpoints.find(endpoint => endpoint.id === 'worker-one').capabilities, ['topic-research']);
 });

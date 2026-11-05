@@ -2,6 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import http from 'node:http';
 import { once } from 'node:events';
+import { readFileSync } from 'node:fs';
+import { parseEnv } from 'node:util';
 import { readEndpoints, normalizeRoster, readRoster, sendTask, request, readCompletionStream, recoverTask } from '../server/adapter.mjs';
 
 test('endpoint configuration validates keys, loopback URLs and unique identities', () => {
@@ -13,6 +15,63 @@ test('endpoint configuration validates keys, loopback URLs and unique identities
     assert.throws(() => readEndpoints({ HERMES_API_KEY: 'key', HERMES_API_URL: url }));
   }
   assert.throws(() => readEndpoints({ HERMES_AGENTS: JSON.stringify([{id:'a',url:'http://localhost',key:'k'},{id:'a',url:'http://localhost',key:'k'}]) }), /unique/);
+});
+
+test('setup diagnostics explain JSON formatting without exposing credentials', () => {
+  const secret = 'private-fixture-secret';
+  for (const value of [`[{"id":"a","key":"${secret}",}]`, `[{\u201cid\u201d:\u201ca\u201d,"key":"${secret}"}]`]) {
+    assert.throws(() => readEndpoints({HERMES_AGENTS: value}), error => {
+      assert.match(error.message, /one line/);
+      assert.match(error.message, /single quotes/);
+      assert.match(error.message, /double quotes/);
+      assert.match(error.message, /trailing commas/);
+      assert.equal(error.message.includes(secret), false);
+      return true;
+    });
+  }
+});
+
+test('published template parses but requires real profile names and keys', () => {
+  const env = parseEnv(readFileSync(new URL('../.env.example', import.meta.url), 'utf8'));
+  const entries = JSON.parse(env.HERMES_AGENTS);
+  assert.ok(Array.isArray(entries) && entries.length > 0);
+  assert.throws(() => readEndpoints(env), /placeholder/);
+  const valid = {id:'coordinator', name:'Coordinator', profile:'team-lead', url:'http://127.0.0.1:8642/p/team-lead', key:'private-fixture-secret'};
+  for (const sample of [
+    {...valid, profile:'your-coordinator-profile'},
+    {...valid, url:'http://127.0.0.1:8642/p/your-worker-profile'},
+    {...valid, key:'COORDINATOR_PROFILE_KEY'},
+    {...valid, key:'WORKER_PROFILE_API_KEY'}
+  ]) {
+    assert.throws(() => readEndpoints({HERMES_AGENTS:JSON.stringify([sample])}), /placeholder/);
+  }
+  assert.equal(readEndpoints({HERMES_AGENTS:JSON.stringify([valid])})[0].profile, 'team-lead');
+});
+
+test('multi-profile key errors point to the entry rather than the legacy key', () => {
+  for (const key of [undefined, '', ' ', 'line\nbreak']) {
+    assert.throws(() => readEndpoints({HERMES_API_KEY:'unused-fallback', HERMES_AGENTS:JSON.stringify([{id:'a',url:'http://localhost:8642',key}])}), /key field.*HERMES_AGENTS.*does not override/);
+  }
+  assert.throws(() => readEndpoints({}), /Set HERMES_API_KEY/);
+});
+
+test('gateway auth and route errors give setup guidance without exposing secrets', async t => {
+  const secret = 'private-fixture-secret';
+  let status = 401;
+  const mock = http.createServer((req, res) => {
+    res.writeHead(status, {'Content-Type':'application/json'});
+    res.end(JSON.stringify({key:secret}));
+  });
+  mock.listen(0, '127.0.0.1'); await once(mock, 'listening');
+  t.after(() => { mock.closeAllConnections(); mock.close(); });
+  const endpoint = {url:`http://127.0.0.1:${mock.address().port}/v1`, key:secret};
+  for (status of [401,403,404]) {
+    await assert.rejects(request(endpoint, '/models'), error => {
+      assert.equal(error.message.includes(secret), false);
+      assert.match(error.message, status === 404 ? /HTTP 404.*profile multiplexing/ : /authentication.*HERMES_AGENTS.*API_SERVER_KEY/);
+      return true;
+    });
+  }
 });
 
 test('roster reports only known task state and request usage', () => {

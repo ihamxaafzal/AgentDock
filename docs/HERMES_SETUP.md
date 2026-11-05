@@ -121,6 +121,29 @@ The example shows generic labels only. In the `.env` file:
 - `reportsTo` is the AgentDock `id` of the coordinator. Set it for delegated workers.
 - `capabilities` is an optional array of generic routing labels. Assign each capability to exactly one worker.
 
+### Enter API keys and preserve the JSON format
+
+Find `API_SERVER_KEY` in the selected Hermes profile's private `.env`. On a default Windows desktop install, named profiles are usually under `%LOCALAPPDATA%\hermes\profiles\<profile>\.env`; the default profile uses `%LOCALAPPDATA%\hermes\.env`. Other installs commonly use `~/.hermes` or the directory set by `HERMES_HOME`. Use the actual data directory, rather than the desktop application's `win-unpacked` folder.
+
+Copy only the value after `API_SERVER_KEY=` into that profile's `"key":"..."` field in AgentDock's `.env`. This is the Hermes gateway secret, not your model provider API key. If the profile has no server key, configure a unique secret in Hermes first and restart its gateway. Keep credentials private.
+
+The JSON block above illustrates the structure. In `.env`, write the whole setting on one line, following `.env.example`:
+
+```dotenv
+HERMES_AGENTS='[{"id":"coordinator","name":"My Coordinator","profile":"your-coordinator-profile","url":"http://127.0.0.1:8642/p/your-coordinator-profile","key":"COORDINATOR_PROFILE_KEY","nativeCoordinator":true}]'
+```
+
+Replace both occurrences of `your-coordinator-profile` with an existing Hermes profile name and replace `COORDINATOR_PROFILE_KEY` with that profile's server key. The example is a connection check with one coordinator; add capability-assigned workers for delegated workflows. AgentDock rejects unchanged template placeholders before contacting Hermes.
+
+Keep the outer single quotes and inner JSON double quotes. Use straight quotes, separate objects with commas, and do not leave a comma before `]` or `}`. If a key contains a JSON-special character such as a double quote or backslash, escape it as required by JSON. Save as `.env`, not `.env.txt`, and restart AgentDock after editing. When `HERMES_AGENTS` is present, setting `HERMES_API_KEY` does not replace its per-profile `key` fields.
+
+| Error | What to check |
+| --- | --- |
+| `HERMES_AGENTS must be a JSON array` | Restore the one-line format from `.env.example`; check quotes, commas, and square brackets. |
+| Placeholder configuration | Replace sample names in both `profile` and `url`, and replace each sample `key`. |
+| Authentication failed / HTTP 401 or 403 | Use the routed profile's own `API_SERVER_KEY` in its `HERMES_AGENTS` entry. |
+| HTTP 404 | Verify the profile exists and `/p/<profile>/v1/models` is reachable on a shared gateway with multiplexing enabled. For separate gateways, use that listener's root URL without `/p/<profile>`. |
+
 ### Capability and tool mapping
 
 | Capability | Hermes toolset needed | Included plugin |

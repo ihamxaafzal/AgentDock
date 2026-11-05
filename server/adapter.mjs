@@ -9,7 +9,7 @@ export function readEndpoints(env = process.env) {
       id: 'hermes', name: 'Hermes', url: env.HERMES_API_URL || 'http://127.0.0.1:8642',
       key: env.HERMES_API_KEY || env.API_SERVER_KEY
     }];
-  } catch { throw new Error('HERMES_AGENTS must be a JSON array of {id, name, url, key} endpoints.'); }
+  } catch { throw new Error('HERMES_AGENTS must be a JSON array of {id, name, url, key} endpoints. In .env, keep HERMES_AGENTS on one line, wrap the array in single quotes, use double quotes inside JSON, and remove trailing commas. See .env.example.'); }
   if (!Array.isArray(entries) || !entries.length) throw new Error('Configure at least one Hermes endpoint.');
   const seen = new Set();
   const endpoints = entries.map(entry => {
@@ -23,8 +23,15 @@ export function readEndpoints(env = process.env) {
     if (!['http:', 'https:'].includes(url.protocol) || !['127.0.0.1', 'localhost', '[::1]'].includes(url.hostname) || url.username || url.password || url.search || url.hash || !path) {
       throw new Error('Hermes URLs must use loopback HTTP(S), with an optional /v1 path and no embedded credentials.');
     }
+    const sampleProfiles = new Set(['your-coordinator-profile', 'your-worker-profile']);
+    const sampleKeys = new Set(['COORDINATOR_PROFILE_KEY', 'WORKER_PROFILE_KEY', 'COORDINATOR_PROFILE_API_KEY', 'WORKER_PROFILE_API_KEY', 'PASTE_YOUR_KEY_HERE']);
+    if (sampleProfiles.has(entry.profile) || sampleProfiles.has(path[1]) || sampleKeys.has(entry.key)) {
+      throw new Error('Replace the placeholder profile names, URLs, and keys from .env.example in your private .env. Each key must match API_SERVER_KEY in that Hermes profile. Restart AgentDock after saving.');
+    }
     if (typeof entry.key !== 'string' || !entry.key.trim() || /[\r\n]/.test(entry.key)) {
-      throw new Error('Set HERMES_API_KEY to your Hermes API_SERVER_KEY, then restart AgentDock.');
+      throw new Error(env.HERMES_AGENTS
+        ? 'Set the key field in each HERMES_AGENTS entry to that profile\'s API_SERVER_KEY. HERMES_API_KEY does not override HERMES_AGENTS. Save .env and restart AgentDock.'
+        : 'Set HERMES_API_KEY to your Hermes API_SERVER_KEY, then restart AgentDock.');
     }
     if (entry.profile && !/^[a-zA-Z0-9_-]{1,64}$/.test(entry.profile)) throw new Error('Invalid Hermes profile name.');
     const capabilities = entry.capabilities ?? [];
@@ -88,7 +95,9 @@ export async function request(endpoint, path, { method = 'GET', body, sessionId,
     if (!response.ok) {
       await response.body?.cancel();
       throw new Error(response.status === 401 || response.status === 403
-        ? 'Hermes authentication failed. Check HERMES_API_KEY against API_SERVER_KEY.'
+        ? 'Hermes authentication failed. Check the matching HERMES_AGENTS entry\'s key (or HERMES_API_KEY for single-profile setup) against that profile\'s API_SERVER_KEY, then restart AgentDock.'
+        : response.status === 404
+        ? 'Hermes returned HTTP 404. Check the configured profile name and URL. Shared gateways need profile multiplexing and a working /p/<profile>/v1/models route; separate profile gateways use their own listener URL.'
         : `Hermes returned HTTP ${response.status}. Inspect its gateway before retrying.`);
     }
     if (response.headers.get('content-type')?.includes('text/event-stream')) return await readCompletionStream(response.body, onProgress);
